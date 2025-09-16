@@ -1,0 +1,41 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "smoke": "node scripts/smoke.js",
+    "server:start:bg": "node scripts/start-bg.js 'next dev -p 3000' 3000 .pids/dev.pid .logs/dev.out /api/mempool/tip-height",
+    "server:stop:bg": "node scripts/stop-bg.js 3000 .pids/dev.pid",
+    "ci": "npm run typecheck && npm run test"
+  },
+  "vitest": {
+    "setupFiles": ["./test/setup.ts"]
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.89.0",
+    "lucide-react": "^0.544.0",
+    "next": "15.5.3",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "zod": "^4.1.8"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.3",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^1.6.0"
+  }
+}

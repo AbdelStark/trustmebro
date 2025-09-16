@@ -1,0 +1,181 @@
+npm warn cli npm v10.9.0 does not support Node.js v19.8.1. This version of npm supports the following node versions: `^18.17.0 || >=20.5.0`. You can find the latest version at https://nodejs.org/.
+
+> web@0.1.0 start
+> next start
+
+ ⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use :::3000
+    at <unknown> (Error: listen EADDRINUSE: address already in use :::3000)
+    at new Promise (<anonymous>) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+npm warn cli npm v10.9.0 does not support Node.js v19.8.1. This version of npm supports the following node versions: `^18.17.0 || >=20.5.0`. You can find the latest version at https://nodejs.org/.
+
+> web@0.1.0 dev
+> next dev --turbopack
+
+ ⚠ Port 3000 is in use by process 93247, using available port 3001 instead.
+   ▲ Next.js 15.5.3 (Turbopack)
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.1.19:3001
+
+ ✓ Starting...
+ ✓ Ready in 1010ms
+   ▲ Next.js 15.5.3
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.19:3000
+
+ ✓ Starting...
+ ✓ Ready in 1202ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.3s (779 modules)
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 3205ms
+ ✓ Compiled in 899ms (305 modules)
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 572ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 574ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 529ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 518ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 554ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 557ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 593ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 569ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 602ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 550ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 555ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 579ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 607ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 589ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 597ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 589ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 548ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 558ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 554ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 563ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 543ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 603ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 555ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 559ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 552ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 549ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 542ms
+[TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection: [TypeError: URL.canParse is not a function]
+ ⨯ unhandledRejection:  [TypeError: URL.canParse is not a function]
+ GET / 500 in 612ms
+ ⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use :::3000
+    at <unknown> (Error: listen EADDRINUSE: address already in use :::3000)
+    at new Promise (<anonymous>) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+[?25h
+   ▲ Next.js 15.5.3
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.19:3000
+
+ ✓ Starting...
+ ✓ Ready in 1211ms
+ ○ Compiling /api/mempool/tip-height ...
+ ✓ Compiled /api/mempool/tip-height in 565ms (296 modules)
+ ⨯ [TypeError: URL.canParse is not a function] {
+  page: '/api/mempool/tip-height'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 1206ms (637 modules)
+ GET /api/mempool/tip-height 500 in 3019ms
+ ⨯ [TypeError: URL.canParse is not a function] {
+  page: '/api/mempool/tip-height'
+}
+ GET /api/mempool/tip-height 500 in 505ms
