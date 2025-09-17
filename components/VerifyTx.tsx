@@ -25,17 +25,15 @@ export function VerifyTxButton({ txid }: { txid: string }) {
   async function run() {
     setBusy(true); setResult(null);
     try {
-      // Fetch and compute but force success for now.
-      const r = await fetch(`/api/mempool/tx-hex?txid=${txid}`);
-      const hex = (await r.text()).trim();
-      if (hex) {
-        const raw = hexToBytes(hex);
-        await sha256d(raw);
-      }
-      await new Promise((r) => setTimeout(r, 300));
-      setResult({ ok: true, details: "Verified locally" });
-    } catch {
-      setResult({ ok: true, details: "Verified locally" });
+      const { getRaitoSdk } = await import("@/lib/raito/sdk");
+      const sdk = await getRaitoSdk();
+      const t0 = Date.now();
+      const proof = await sdk.fetchProof(txid);
+      const ok = await sdk.verifyProof(proof);
+      const dt = Date.now() - t0;
+      setResult({ ok, details: ok ? `Verified in ${dt}ms` : `Invalid (${dt}ms)` });
+    } catch (e: any) {
+      setResult({ ok: false, details: e?.message || "Verification failed" });
     } finally { setBusy(false); }
   }
 

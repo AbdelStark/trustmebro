@@ -6,7 +6,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { CopyToClipboard } from "./CopyToClipboard";
-import { ProofBadge, type ProofStatus } from "./ProofBadge";
+import { type ProofStatus } from "./ProofBadge";
+import { getRaitoSdk } from "@/lib/raito/sdk";
 
 type TxMeta = { id: string; size: number; weight: number; fee?: number };
 
@@ -33,14 +34,20 @@ export function TxList({ hash, total }: { hash: string; total: number }) {
       // Lazy fetch proof status for these txs
       try {
         console.groupCollapsed(`[TxList] fetching proof statuses for ${j.length} txs…`);
+        const sdk = await getRaitoSdk();
         await Promise.all(
           j.map(async (t) => {
             const short = t.id.slice(0, 8);
-            console.log(`  → [${short}] status: request`);
-            const rs = await fetch(`/api/proofs/tx?txid=${t.id}`);
-            const js = await rs.json();
-            console.log(`  ← [${short}] status: ${js?.status ?? 'unknown'}`);
-            setStatus((prev) => ({ ...prev, [t.id]: js.status as ProofStatus }));
+            console.log(`  → [${short}] status: fetchProof`);
+            try {
+              const proof = await sdk.fetchProof(t.id);
+              const ok = await sdk.verifyProof(proof);
+              console.log(`  ← [${short}] status: ${ok ? 'verified' : 'invalid'}`);
+              setStatus((prev) => ({ ...prev, [t.id]: (ok ? 'verified' : 'invalid') as ProofStatus }));
+            } catch (e) {
+              console.log(`  ← [${short}] status: unavailable (error)`);
+              setStatus((prev) => ({ ...prev, [t.id]: 'unavailable' }));
+            }
           })
         );
         console.groupEnd();

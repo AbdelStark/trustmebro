@@ -1,7 +1,7 @@
 import { getBaseUrl } from "@/lib/base-url";
 import { formatBytes, formatWu } from "@/lib/formatters";
-import { ProofBadge, type ProofStatus } from "@/components/ProofBadge";
 import { VerifyTxButton } from "@/components/VerifyTx";
+import { TxProofBadge } from "@/components/TxProofBadge";
 
 async function getTx(id: string) {
   const base = await getBaseUrl();
@@ -13,10 +13,6 @@ async function getTx(id: string) {
 export default async function TxPage({ params }: { params: Promise<{ id: string }> }) {
   const p = await params;
   const tx = await getTx(p.id);
-  const base = await getBaseUrl();
-  const proof = await fetch(`${base}/api/proofs/tx?txid=${p.id}`, { cache: "no-store" }).then(
-    (r) => r.json() as Promise<{ status: ProofStatus }>
-  );
   return (
     <div className="space-y-6">
       <div className="panel p-4 space-y-3">
@@ -26,7 +22,7 @@ export default async function TxPage({ params }: { params: Promise<{ id: string 
             <h1 className="text-xl font-semibold font-mono break-all">{tx.txid}</h1>
           </div>
           <div className="flex items-center gap-3">
-            <ProofBadge status={proof.status} />
+            <TxProofBadge txid={tx.txid} />
             <VerifyTxButton txid={tx.txid} />
           </div>
         </div>
