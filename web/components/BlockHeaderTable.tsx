@@ -2,7 +2,7 @@
  * What this file does
  * Renders a table of block header fields.
  */
-import { truncateHex } from "@/lib/formatters";
+import { truncateHex, formatBytes, formatWu } from "@/lib/formatters";
 
 export function BlockHeaderTable({ header }: { header: any }) {
   const rows: [string, string][] = [
@@ -15,8 +15,8 @@ export function BlockHeaderTable({ header }: { header: any }) {
     ["Merkle Root", header.merkle_root],
     ["Prev Hash", header.previousblockhash ?? "-"],
     ["Tx Count", String(header.tx_count)],
-    ["Size", String(header.size)],
-    ["Weight", String(header.weight)],
+    ["Size", formatBytes(header.size)],
+    ["Weight", formatWu(header.weight)],
   ];
   return (
     <div className="panel p-4">

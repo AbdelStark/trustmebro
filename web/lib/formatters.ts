@@ -10,12 +10,15 @@ export function truncateHex(hex: string, left = 10, right = 8) {
 
 export function formatBytes(n: number) {
   if (n < 1024) return `${n} B`;
-  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
-  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(2)} kB`;
+  if (n < 1024 * 1024 * 1024) return `${(n / (1024 * 1024)).toFixed(2)} MB`;
+  return `${(n / (1024 * 1024 * 1024)).toFixed(2)} GB`;
 }
 
 export function formatWu(weight: number) {
-  return `${weight.toLocaleString()} wu`;
+  if (weight >= 1_000_000) return `${(weight / 1_000_000).toFixed(2)} MWU`;
+  if (weight >= 1_000) return `${(weight / 1_000).toFixed(2)} kWU`;
+  return `${weight.toLocaleString()} WU`;
 }
 
 export function timeAgo(tsSec: number) {
@@ -30,4 +33,3 @@ export function timeAgo(tsSec: number) {
   const days = Math.floor(hours / 24);
   return `${days} d ago`;
 }
-
