@@ -29,10 +29,9 @@ export function ProofBadge({ status }: { status: ProofStatus }) {
 
   const s = map[status];
   return (
-    <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-[var(--surface)] px-2 py-1 text-xs">
+    <span className="badge text-xs">
       {s.icon}
       <span>{s.label}</span>
     </span>
   );
 }
-

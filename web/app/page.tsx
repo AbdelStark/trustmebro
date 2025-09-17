@@ -20,14 +20,14 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
       <div className="flex items-end justify-between">
         <div>
           <h1 className="text-2xl font-semibold">Latest Blocks</h1>
-          <p className="text-sm text-[var(--muted)]">Fetched from mempool.space via server proxy</p>
+          <p className="text-sm text-[var(--muted)]">Fetched via server proxy · Esplora compatible</p>
         </div>
       </div>
       <BlockGrid blocks={blocks} />
       {last && (
         <div className="pt-4">
           <a
-            className="inline-flex items-center gap-2 rounded-md border border-white/10 px-3 py-2 hover:border-[var(--accent-600)]"
+            className="btn"
             href={`/?start_height=${last - 1}`}
           >
             Load more

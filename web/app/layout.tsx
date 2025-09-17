@@ -37,6 +37,7 @@ export default function RootLayout({
               <div className="flex-1" />
               <SearchBar />
             </div>
+            <div className="divider" />
           </header>
           <main className="mx-auto max-w-6xl px-4 py-6">
             {children}

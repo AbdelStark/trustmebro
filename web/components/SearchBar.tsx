@@ -39,11 +39,10 @@ export default function SearchBar() {
         value={q}
         onChange={(e) => setQ(e.target.value)}
         placeholder="Search height or block hash"
-        className="w-[320px] rounded-md border border-white/10 bg-[var(--surface)] px-3 py-1.5 outline-none ring-accent"
+        className="w-[360px] rounded-md border border-white/10 bg-[var(--surface)] px-3 py-2 text-sm outline-none focus-visible:outline-[var(--ring)] placeholder:text-[var(--muted-3)]"
       />
-      <button className="rounded-md border border-white/10 px-3 py-1.5 text-sm hover:border-[var(--accent-600)]">Search</button>
+      <button className="btn text-sm">Search</button>
       {err && <span className="text-[var(--danger)] text-xs">{err}</span>}
     </form>
   );
 }
-

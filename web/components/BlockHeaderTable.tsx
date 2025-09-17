@@ -24,8 +24,8 @@ export function BlockHeaderTable({ header }: { header: any }) {
         <tbody>
           {rows.map(([k, v]) => (
             <tr key={k} className="border-b border-white/5 last:border-0">
-              <td className="py-2 text-[var(--muted)]">{k}</td>
-              <td className="py-2 font-mono break-all">{v.length > 40 ? truncateHex(v) : v}</td>
+              <td className="py-2 pr-3 align-top text-[var(--muted)] whitespace-nowrap">{k}</td>
+              <td className="py-2 font-mono break-all text-[0.95rem]">{v.length > 40 ? truncateHex(v) : v}</td>
             </tr>
           ))}
         </tbody>
@@ -33,4 +33,3 @@ export function BlockHeaderTable({ header }: { header: any }) {
     </div>
   );
 }
-

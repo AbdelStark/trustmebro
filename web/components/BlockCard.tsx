@@ -27,30 +27,33 @@ export async function BlockCard({ block }: { block: BlockHeader }) {
   );
 
   return (
-    <div className="panel p-4 hover:shadow-md hover:shadow-[var(--accent-600)]/10 transition-shadow">
-      <div className="flex items-center gap-2 justify-between">
-        <div className="font-semibold">Block #{block.height}</div>
+    <div className="relative panel p-4 transition-shadow hover:shadow-[var(--accent-600)]/10 hover:shadow-lg overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none grid-chrome" />
+
+      <div className="relative flex items-start justify-between">
+        <div className="space-y-1">
+          <div className="text-[13px] tracking-wide text-[var(--muted-2)]">Block</div>
+          <div className="text-lg font-semibold">#{block.height}</div>
+        </div>
         <ProofBadge status={proof.status} />
       </div>
-      <div className="mt-1 text-sm text-[var(--muted)]">
+
+      <div className="relative mt-2 text-sm text-[var(--muted)]">
         <TimeAgo ts={block.timestamp} /> · txs: {block.tx_count} · size: {formatBytes(block.size)} · weight: {formatWu(block.weight)}
       </div>
-      <div className="mt-3 font-mono text-sm break-all">
-        <div className="flex items-center gap-2">
+
+      <div className="relative mt-3 text-sm">
+        <div className="flex items-center gap-2 font-mono">
           <span className="truncate">{truncateHex(block.id)}</span>
           <CopyToClipboard text={block.id} ariaLabel="Copy block hash" />
         </div>
+        {block.previousblockhash && (
+          <div className="mt-1 text-xs text-[var(--muted)]">prev: {truncateHex(block.previousblockhash)}</div>
+        )}
       </div>
-      {block.previousblockhash && (
-        <div className="mt-2 text-xs text-[var(--muted)]">
-          prev: {truncateHex(block.previousblockhash)}
-        </div>
-      )}
-      <div className="mt-3">
-        <Link
-          className="inline-flex items-center gap-2 rounded-md border border-white/10 px-3 py-1.5 text-sm hover:border-[var(--accent-600)]"
-          href={`/block/${block.id}`}
-        >
+
+      <div className="relative mt-4">
+        <Link className="btn text-sm" href={`/block/${block.id}`}>
           Open details →
         </Link>
       </div>
