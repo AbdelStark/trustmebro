@@ -28,6 +28,7 @@ web/.logs
 # production
 /build
 
+.ai
 # misc
 .DS_Store
 *.pem
