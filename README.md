@@ -103,8 +103,3 @@ These hooks make it straightforward to swap in real verification or ZK proof che
 - Batch proof status requests for tx lists
 - Virtualized tx list for very large blocks
 - Add confirmations and total output value per tx
-
----
-
-If you want help wiring the real proof verification pipeline, share the provider API details and I’ll integrate it end‑to‑end (proxy, UI states, and verification flows) with the same design standard.
-
