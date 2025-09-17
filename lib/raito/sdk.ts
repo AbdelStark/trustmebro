@@ -23,6 +23,71 @@ let sdkPromise: Promise<ClientSdk> | null = null;
 const proofCache = new Map<string, string>();
 const proofPending = new Map<string, Promise<string>>();
 
+// sessionStorage-backed cache (best-effort)
+const SS_PREFIX = "raito:proof:";
+const SS_INDEX = SS_PREFIX + "index";
+const MAX_ENTRIES = 100; // cap number of proofs
+const MAX_BYTES = 3_000_000; // ~3MB total budget
+
+function now() { return Date.now(); }
+
+function safeSession(): Storage | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const s = window.sessionStorage;
+    const k = "__test";
+    s.setItem(k, "1"); s.removeItem(k);
+    return s;
+  } catch { return null; }
+}
+
+type IndexEntry = { id: string; size: number; t: number };
+
+function loadIndex(ss: Storage): IndexEntry[] {
+  try { return JSON.parse(ss.getItem(SS_INDEX) || "[]") as IndexEntry[]; } catch { return []; }
+}
+function saveIndex(ss: Storage, idx: IndexEntry[]) {
+  try { ss.setItem(SS_INDEX, JSON.stringify(idx)); } catch {}
+}
+function totalBytes(idx: IndexEntry[]) { return idx.reduce((a, b) => a + (b.size || 0), 0); }
+
+function trimIndex(ss: Storage, idx: IndexEntry[]) {
+  // Sort by last access ascending, remove oldest until within caps
+  idx.sort((a, b) => a.t - b.t);
+  while (idx.length > MAX_ENTRIES || totalBytes(idx) > MAX_BYTES) {
+    const rm = idx.shift();
+    if (rm) ss.removeItem(SS_PREFIX + rm.id);
+  }
+  saveIndex(ss, idx);
+}
+
+function putProofToSession(id: string, text: string) {
+  const ss = safeSession();
+  if (!ss) return;
+  try {
+    const size = text.length;
+    const idx = loadIndex(ss);
+    const existing = idx.find((e) => e.id === id);
+    if (existing) existing.size = size, existing.t = now(); else idx.push({ id, size, t: now() });
+    ss.setItem(SS_PREFIX + id, text);
+    trimIndex(ss, idx);
+  } catch {}
+}
+
+function getProofFromSession(id: string): string | null {
+  const ss = safeSession();
+  if (!ss) return null;
+  try {
+    const v = ss.getItem(SS_PREFIX + id);
+    if (v == null) return null;
+    // touch index timestamp
+    const idx = loadIndex(ss);
+    const e = idx.find((x) => x.id === id);
+    if (e) { e.t = now(); saveIndex(ss, idx); }
+    return v;
+  } catch { return null; }
+}
+
 export async function getRaitoSdk(): Promise<ClientSdk> {
   if (!sdkPromise) {
     sdkPromise = (async () => {
@@ -41,8 +106,8 @@ export async function getRaitoSdk(): Promise<ClientSdk> {
       };
 
       const fetchProof = async (txid: string) => {
-        const cached = proofCache.get(txid);
-        if (cached) return cached;
+        const cached = proofCache.get(txid) || getProofFromSession(txid);
+        if (cached) { proofCache.set(txid, cached); return cached; }
         const inflight = proofPending.get(txid);
         if (inflight) return inflight;
         const p = (async () => {
@@ -51,6 +116,7 @@ export async function getRaitoSdk(): Promise<ClientSdk> {
           if (!r.ok) throw new Error(`fetchProof failed: ${r.status}`);
           const text = await r.text();
           proofCache.set(txid, text);
+          putProofToSession(txid, text);
           proofPending.delete(txid);
           return text;
         })();

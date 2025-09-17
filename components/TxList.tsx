@@ -6,6 +6,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { CopyToClipboard } from "./CopyToClipboard";
+import InlineVerifyTx from "@/components/InlineVerifyTx";
 
 type TxMeta = { id: string; size: number; weight: number; fee?: number };
 
@@ -76,15 +77,18 @@ export function TxList({ hash, total }: { hash: string; total: number }) {
               const vb = Math.max(1, Math.round(t.weight / 4));
               const rate = t.fee != null ? (t.fee / vb) : null;
               return (
-                <div key={t.id} className="flex items-center justify-between rounded-md border border-white/10 bg-[var(--surface)] px-3 py-2">
+                <div key={t.id} className="group flex items-center justify-between rounded-md border border-white/10 bg-[var(--surface)] px-3 py-2">
                   <div className="flex items-center gap-2 min-w-0">
                     <div className="font-mono text-sm truncate pr-2">
                       <Link className="hover:underline" href={`/tx/${t.id}`}>{t.id}</Link>
                     </div>
                     <CopyToClipboard text={t.id} ariaLabel="Copy txid" />
                   </div>
-                  <div className="text-xs text-[var(--muted)] whitespace-nowrap">
-                    {t.fee != null ? `${t.fee} sat · ${rate!.toFixed(2)} sat/vB` : "—"} · {vb} vB · {t.weight.toLocaleString()} WU
+                  <div className="flex items-center gap-3 whitespace-nowrap">
+                    <div className="text-xs text-[var(--muted)]">
+                      {t.fee != null ? `${t.fee} sat · ${rate!.toFixed(2)} sat/vB` : "—"} · {vb} vB · {t.weight.toLocaleString()} WU
+                    </div>
+                    <InlineVerifyTx txid={t.id} />
                   </div>
                 </div>
               );
