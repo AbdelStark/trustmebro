@@ -2,7 +2,7 @@
 
 TrustMeBro is a modern, pixel‑perfect Bitcoin block explorer built with Next.js (App Router) and TypeScript. It proxies the public Esplora endpoints from mempool.space, validates responses, and presents blocks and transactions with a premium, Bitcoin‑maxi dark UI. The app is wired for ZK proof badges and includes “Verify locally” flows for blocks and transactions.
 
-Note: Proof status currently returns “verified” for all blocks and transactions while the real verification pipeline is being integrated. The local verification buttons run the computations and present success for this cut.
+Status: Transaction proof verification is implemented fully client‑side via the Raito SPV SDK (WASM in the browser). Block‑level proof verification is planned. A temporary local "Verify" action exists for blocks and returns a success placeholder for now.
 
 ## Highlights
 
@@ -10,7 +10,9 @@ Note: Proof status currently returns “verified” for all blocks and transacti
 - Latest blocks with elegant cards and a fullness meter (WU‑based)
 - Block detail with structured header table and actions
 - Transactions section with expand/collapse, sticky search, status dots, fee rate, copy txid, and pagination
-- ZK proof badges (blocks and txs), currently stubbed to “verified”
+- ZK proof badges:
+  - Transactions: verified client‑side using Raito SDK
+  - Blocks: badge present; proof integration pending
 - Local verification buttons with tasteful animations
 - Clean server proxy routes with Zod validation and short revalidate windows
 
@@ -69,8 +71,7 @@ Optional helper scripts (if present):
 - `GET /api/mempool/block-txs?hash=&from=` → block transactions, paged (proxies `…/api/block/{hash}/txs`)
 - `GET /api/mempool/tx?txid=` → tx detail (proxies `…/api/tx/{txid}`)
 - `GET /api/mempool/tx-hex?txid=` → raw tx hex (proxies `…/api/tx/{txid}/hex`)
-- `GET /api/proofs/block?hash=` → ZK status for block (currently always `verified`)
-- `GET /api/proofs/tx?txid=` → ZK status for tx (currently always `verified`)
+- `GET /api/proofs/block?hash=` → placeholder ZK status for block (currently always `verified` — not used by UI)
 
 All upstream responses are validated with Zod where applicable and mapped to friendly errors (`502 upstream`, `500 schema`, etc.).
 
@@ -83,12 +84,15 @@ The design system is documented in `DESIGN.md` and implemented via CSS primitive
 - Typography: Geist + Geist Mono with careful sizes/spacing
 - Interaction: subtle animations (spinner, pulse), high‑contrast focus rings, accessible hit targets
 
-## Local Verification (current behavior)
+## Verification
 
-- Blocks: “Verify locally” serializes the header and performs double‑SHA256 and target calculation, but reports success unconditionally in this cut.
-- Transactions: “Verify locally” fetches raw hex and recomputes txid, but reports success unconditionally in this cut.
-
-These hooks make it straightforward to swap in real verification or ZK proof checks without altering the UI.
+- Transactions (client‑side, live):
+  - Uses the Raito SPV Verify SDK in the browser (WASM web build).
+  - For each tx, the UI fetches the compressed SPV proof and verifies it locally; the badge and list dots update accordingly.
+  - Logging is human‑friendly and visible in DevTools.
+- Blocks (placeholder):
+  - A local "Verify locally" action exists for UX parity, currently a success placeholder.
+  - Full block‑level proof integration will be added (see TODO).
 
 ## Development Notes
 
@@ -96,10 +100,13 @@ These hooks make it straightforward to swap in real verification or ZK proof che
 - Dynamic route params and `searchParams` are awaited to comply with Next 15 behavior.
 - Keep proxy handlers small and predictable; add Zod schemas for any new upstream payloads.
 
-## Roadmap (next)
+## TODO
 
-- Integrate real ZK proof verification endpoints for blocks and transactions
-- Replace placeholder “always verified” with provider results
-- Batch proof status requests for tx lists
-- Virtualized tx list for very large blocks
-- Add confirmations and total output value per tx
+- [x] Client‑side transaction proof verification with Raito SDK (fetch + verify in browser)
+- [x] Production build compatibility on Vercel (async WASM, webpack)
+- [ ] Block‑level proof verification
+- [ ] Concurrency limit + in‑memory cache for tx proof verification
+- [ ] Batch or queue proof checks to reduce bursts
+- [ ] Structured data (JSON‑LD) for SEO
+- [ ] Virtualized tx list for very large blocks
+- [ ] Show confirmations and total output value per tx
