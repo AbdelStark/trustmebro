@@ -16,6 +16,7 @@
   --success: #39ff14;
   --warning: #ffcc00;
   --danger: #ff3b3b;
+  --error: #ff5e5e;
   --ring: var(--accent-600);
   --radius: 10px;
   --gap: 12px;
@@ -128,6 +129,7 @@ body {
 .dot.success { background: var(--success); box-shadow: 0 0 8px rgba(57,255,20,0.4); }
 .dot.pending { background: var(--warning); }
 .dot.invalid { background: var(--danger); }
+.dot.error { background: var(--danger); }
 .dot.muted { background: rgba(255,255,255,0.3); }
 
 /* Simple spinner */

@@ -6,8 +6,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { CopyToClipboard } from "./CopyToClipboard";
-import { type ProofStatus } from "./ProofBadge";
-import { getRaitoSdk } from "@/lib/raito/sdk";
+import { TxProofBadge } from "./TxProofBadge";
 
 type TxMeta = { id: string; size: number; weight: number; fee?: number };
 
@@ -17,7 +16,6 @@ export function TxList({ hash, total }: { hash: string; total: number }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [q, setQ] = useState("");
-  const [status, setStatus] = useState<Record<string, ProofStatus>>({});
 
   async function loadMore() {
     if (loading) return;
@@ -31,27 +29,6 @@ export function TxList({ hash, total }: { hash: string; total: number }) {
       if (!Array.isArray(j)) throw new Error("Bad response");
       setItems((prev) => [...prev, ...j]);
       console.log(`[TxList] received ${j.length} txs (loaded=${from + j.length}/${total})`);
-      // Lazy fetch proof status for these txs
-      try {
-        console.groupCollapsed(`[TxList] fetching proof statuses for ${j.length} txs…`);
-        const sdk = await getRaitoSdk();
-        await Promise.all(
-          j.map(async (t) => {
-            const short = t.id.slice(0, 8);
-            console.log(`  → [${short}] status: fetchProof`);
-            try {
-              const proof = await sdk.fetchProof(t.id);
-              const ok = await sdk.verifyProof(proof);
-              console.log(`  ← [${short}] status: ${ok ? 'verified' : 'invalid'}`);
-              setStatus((prev) => ({ ...prev, [t.id]: (ok ? 'verified' : 'invalid') as ProofStatus }));
-            } catch (e) {
-              console.log(`  ← [${short}] status: unavailable (error)`);
-              setStatus((prev) => ({ ...prev, [t.id]: 'unavailable' }));
-            }
-          })
-        );
-        console.groupEnd();
-      } catch {}
     } catch (e: any) {
       console.error(`[TxList] error loading txs:`, e);
       setError(e?.message || "Failed to load transactions");
@@ -99,11 +76,10 @@ export function TxList({ hash, total }: { hash: string; total: number }) {
             {filtered.map((t) => {
               const vb = Math.max(1, Math.round(t.weight / 4));
               const rate = t.fee != null ? (t.fee / vb) : null;
-              const s = status[t.id] || "verified";
               return (
                 <div key={t.id} className="flex items-center justify-between rounded-md border border-white/10 bg-[var(--surface)] px-3 py-2">
                   <div className="flex items-center gap-2 min-w-0">
-                    <span className={`dot ${s === 'verified' ? 'success' : s === 'pending' ? 'pending' : s === 'invalid' ? 'invalid' : 'muted'}`} />
+                    <TxProofBadge txid={t.id} iconOnly={true} />
                     <div className="font-mono text-sm truncate pr-2">
                       <Link className="hover:underline" href={`/tx/${t.id}`}>{t.id}</Link>
                     </div>

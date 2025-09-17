@@ -5,9 +5,9 @@
  */
 import { CheckCircle2, Clock3, XCircle, MinusCircle } from "lucide-react";
 
-export type ProofStatus = "verified" | "pending" | "invalid" | "unavailable";
+export type ProofStatus = "verified" | "pending" | "invalid" | "unavailable" | "error";
 
-export function ProofBadge({ status }: { status: ProofStatus }) {
+export function ProofBadge({ status, iconOnly = false }: { status: ProofStatus; iconOnly?: boolean }) {
   const map = {
     verified: {
       icon: <CheckCircle2 size={16} className="text-[var(--success)]" />,
@@ -25,13 +25,17 @@ export function ProofBadge({ status }: { status: ProofStatus }) {
       icon: <MinusCircle size={16} className="text-[var(--muted)]" />,
       label: "No ZK proof yet",
     },
+    error: {
+      icon: <MinusCircle size={16} className="text-[var(--error)]" />,
+      label: "Verification error",
+    },
   } as const;
 
   const s = map[status];
   return (
     <span className="badge text-xs">
       {s.icon}
-      <span>{s.label}</span>
+      {!iconOnly && <span>{s.label}</span>}
     </span>
   );
 }

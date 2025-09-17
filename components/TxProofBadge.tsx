@@ -6,8 +6,13 @@
 import { useEffect, useState } from "react";
 import { ProofBadge, type ProofStatus } from "./ProofBadge";
 import { getRaitoSdk } from "@/lib/raito/sdk";
+import { VerifierConfig } from "@starkware-bitcoin/spv-verify";
 
-export function TxProofBadge({ txid }: { txid: string }) {
+const config: Partial<VerifierConfig> =  {
+  min_work: "0",
+};
+
+export function TxProofBadge({ txid, iconOnly = false }: { txid: string; iconOnly?: boolean }) {
   const [status, setStatus] = useState<ProofStatus>("pending");
 
   useEffect(() => {
@@ -22,18 +27,18 @@ export function TxProofBadge({ txid }: { txid: string }) {
         const t1 = Date.now();
         console.log(`[RaitoSDK/client][tx ${short}] fetchProof: ok in ${t1 - t0}ms`);
         console.log(`[RaitoSDK/client][tx ${short}] verifyProof: start`);
-        const ok = await sdk.verifyProof(proof);
+        const ok = await sdk.verifyProof(proof, config);
         console.log(`[RaitoSDK/client][tx ${short}] verifyProof: ${ok ? "valid ✅" : "invalid ❌"}`);
         if (!alive) return;
         setStatus(ok ? "verified" : "invalid");
       } catch (e) {
-        console.error(`[RaitoSDK/client] error`, e);
-        if (alive) setStatus("unavailable");
+        console.error(`[RaitoSDK/client] error`, e, alive);
+        if (alive) setStatus("error");
       }
     })();
     return () => { alive = false; };
   }, [txid]);
 
-  return <ProofBadge status={status} />;
+  return <ProofBadge status={status} iconOnly={iconOnly} />;
 }
 
