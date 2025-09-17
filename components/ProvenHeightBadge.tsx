@@ -66,6 +66,7 @@ export default function ProvenHeightBadge() {
   const loading = status === "pending" || isFetching;
   const error = status === "error";
   const ok = status === "success" && typeof height === "number";
+  const updatedText = loading ? "Updating…" : ok ? `Updated ${since(dataUpdatedAt)}` : error ? "Failed" : "";
 
   return (
     <div className="flex items-center gap-2" aria-live="polite">
@@ -88,6 +89,9 @@ export default function ProvenHeightBadge() {
         <span className="label hidden md:inline">Proven height</span>
         <span className="mono">{ok ? formatNumber(height!) : loading ? "…" : "—"}</span>
       </div>
+      {updatedText && (
+        <span className="label hidden lg:inline whitespace-nowrap text-[var(--muted-3)]">• {updatedText}</span>
+      )}
       <button
         className="btn"
         onClick={onGoLatest}
