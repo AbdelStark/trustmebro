@@ -106,3 +106,19 @@ body {
   background-position: -1px -1px;
   mask-image: linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.85));
 }
+
+/* Fullness meter */
+.meter {
+  --p: 0%;
+  height: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.06));
+  overflow: hidden;
+}
+.meter > span {
+  display: block;
+  height: 100%;
+  width: var(--p);
+  background: linear-gradient(90deg, #8a8f99, #c0c4cc, var(--accent-600));
+}

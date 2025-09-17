@@ -7,6 +7,7 @@ import { truncateHex, formatBytes, formatWu } from "@/lib/formatters";
 import { ProofBadge, type ProofStatus } from "./ProofBadge";
 import { CopyToClipboard } from "./CopyToClipboard";
 import { TimeAgo } from "./TimeAgo";
+import { BlockFullness } from "./BlockFullness";
 import { getBaseUrl } from "@/lib/base-url";
 
 type BlockHeader = {
@@ -52,7 +53,11 @@ export async function BlockCard({ block }: { block: BlockHeader }) {
         )}
       </div>
 
-      <div className="relative mt-4">
+      <div className="relative mt-3">
+        <BlockFullness weight={block.weight} />
+      </div>
+
+      <div className="relative mt-3">
         <Link className="btn text-sm" href={`/block/${block.id}`}>
           Open details →
         </Link>

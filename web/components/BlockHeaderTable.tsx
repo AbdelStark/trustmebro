@@ -17,6 +17,7 @@ export function BlockHeaderTable({ header }: { header: any }) {
     ["Tx Count", String(header.tx_count)],
     ["Size", formatBytes(header.size)],
     ["Weight", formatWu(header.weight)],
+    ["Fullness", `${Math.round(Math.min(1, header.weight / 4_000_000) * 100)}%`],
   ];
   return (
     <div className="panel p-4">
