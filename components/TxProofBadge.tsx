@@ -33,7 +33,13 @@ export function TxProofBadge({ txid, iconOnly = false }: { txid: string; iconOnl
         setStatus(ok ? "verified" : "invalid");
       } catch (e) {
         console.error(`[RaitoSDK/client] error`, e, alive);
-        if (alive) setStatus("error");
+        if (alive) {
+          if (e instanceof Error && typeof e.message === "string" && e.message.includes("fetchProof failed: 500")) {
+            setStatus("unavailable");
+          } else {
+            setStatus("error");
+          }
+        }
       }
     })();
     return () => { alive = false; };

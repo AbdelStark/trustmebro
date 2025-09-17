@@ -33,9 +33,14 @@ export function ProofBadge({ status, iconOnly = false }: { status: ProofStatus; 
 
   const s = map[status];
   return (
-    <span className="badge text-xs">
+    <span className="badge text-xs group relative">
       {s.icon}
       {!iconOnly && <span>{s.label}</span>}
+      {iconOnly && (
+        <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 whitespace-nowrap rounded bg-[var(--panel)] text-[var(--muted-2)] px-2 py-1 text-xs shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-10">
+          {s.label}
+        </span>
+      )}
     </span>
   );
 }
