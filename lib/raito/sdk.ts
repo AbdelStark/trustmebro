@@ -8,6 +8,7 @@
 type ClientSdk = {
   fetchProof(txid: string): Promise<string>;
   verifyProof(proof: string, config?: Partial<VerifierConfig>): Promise<boolean>;
+  fetchRecentProvenHeight(): Promise<number>;
 };
 
 type VerifierConfig = {
@@ -43,6 +44,19 @@ export async function getRaitoSdk(): Promise<ClientSdk> {
         return r.text();
       };
 
+      const fetchRecentProvenHeight = async () => {
+        if (typeof window === "undefined") throw new Error("client-only");
+        console.log("[RaitoSDK/client] fetchRecentProvenHeight: dynamic import start");
+        // eslint-disable-next-line no-eval
+        const importer: (s: string) => Promise<any> = (0, eval)("import");
+        const mod = await importer("@starkware-bitcoin/spv-verify");
+        console.log("[RaitoSDK/client] fetchRecentProvenHeight: module loaded");
+        const sdk = mod.createRaitoSpvSdk("https://api.raito.wtf");
+        const n = await sdk.fetchRecentProvenHeight();
+        console.log("[RaitoSDK/client] fetchRecentProvenHeight: success height=", n);
+        return n;
+      };
+
       const verifyProof = async (proof: string, config?: Partial<VerifierConfig>) => {
         const cfg = JSON.stringify({ ...defaults, ...(config || {}) });
         const f = wasm.verify_proof_with_config ?? wasm.verify_proof;
@@ -50,7 +64,7 @@ export async function getRaitoSdk(): Promise<ClientSdk> {
         return !!(await f(proof, cfg));
       };
 
-      const sdk: ClientSdk = { fetchProof, verifyProof };
+      const sdk: ClientSdk = { fetchProof, verifyProof, fetchRecentProvenHeight };
       return sdk;
     })();
   }

@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
+import ProvenHeightBadge from "@/components/ProvenHeightBadge";
 import { getSiteUrl } from "@/lib/site";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -65,6 +66,7 @@ export default function RootLayout({
               </Link>
               <span className="label hidden sm:inline">ZK ready Bitcoin Explorer</span>
               <div className="flex-1" />
+              <ProvenHeightBadge />
               <SearchBar />
             </div>
             <div className="divider" />

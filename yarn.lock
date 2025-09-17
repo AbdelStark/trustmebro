@@ -618,10 +618,10 @@
   resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.27.8.tgz"
   integrity sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==
 
-"@starkware-bitcoin/spv-verify@0.0.7":
-  version "0.0.7"
-  resolved "https://registry.npmjs.org/@starkware-bitcoin/spv-verify/-/spv-verify-0.0.7.tgz"
-  integrity sha512-o8imV92Wr/B6PkPS9vntBcgeTHF18cw1CK9LlTRpBdS6BgNbz22oJg4C+E8lEwNVHoJIu4rKy39sE+5zqrnD5w==
+"@starkware-bitcoin/spv-verify@0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@starkware-bitcoin/spv-verify/-/spv-verify-0.0.9.tgz#0be311d7fdc1009010513685530ff95110bec0d4"
+  integrity sha512-nBQ5hK1gpmZBqmyBZ/7HDq+WhOdYaYJsgn73WLOXzBixbiII3bL1BxzhrZgMGjuHx+PXaWApGSr31vN/v5jACA==
 
 "@swc/helpers@0.5.15":
   version "0.5.15"
