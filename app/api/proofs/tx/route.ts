@@ -1,30 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createRaitoSpvSdk } from "@starkware-bitcoin/spv-verify";
 
 type ProofStatus = "verified" | "pending" | "invalid" | "unavailable";
 
-let sdkPromise: Promise<any> | null = null;
-async function getSdk() {
-  if (!sdkPromise) {
-    sdkPromise = (async () => {
-      const mod = await import("@starkware-bitcoin/spv-verify");
-      const sdk = (mod as any).createRaitoSpvSdk?.(process.env.RAITO_RPC_URL) ?? (mod as any).createRaitoSpvSdk?.();
-      if (!sdk) throw new Error("Raito SPV SDK not available");
-      await sdk.init();
-      return sdk;
-    })();
-  }
-  return sdkPromise;
+// Single SDK instance reused across requests. The SDK manages its own defaults
+// (no custom URL required).
+const sdkInstance = createRaitoSpvSdk();
+let sdkReady: Promise<void> | null = null;
+function ensureSdk() {
+  if (!sdkReady) sdkReady = sdkInstance.init();
+  return sdkReady;
 }
 
 export async function GET(req: NextRequest) {
   const txid = req.nextUrl.searchParams.get("txid");
   if (!txid) return NextResponse.json({ status: "unavailable" as const }, { status: 400 });
   try {
-    const sdk = await getSdk();
+    await ensureSdk();
     const t0 = Date.now();
-    const proof = await sdk.fetchProof(txid);
+    const proof = await sdkInstance.fetchProof(txid);
     const t1 = Date.now();
-    const ok: boolean = await sdk.verifyProof(proof);
+    const ok: boolean = await sdkInstance.verifyProof(proof);
     const t2 = Date.now();
     let meta: any = {};
     try {
