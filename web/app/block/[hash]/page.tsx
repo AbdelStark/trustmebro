@@ -15,9 +15,10 @@ async function getProof(hash: string): Promise<{ status: ProofStatus }> {
   return r.json();
 }
 
-export default async function BlockDetail({ params }: { params: { hash: string } }) {
-  const header = await getHeader(params.hash);
-  const proof = await getProof(params.hash);
+export default async function BlockDetail({ params }: { params: Promise<{ hash: string }> }) {
+  const p = await params;
+  const header = await getHeader(p.hash);
+  const proof = await getProof(p.hash);
   // Local header verification panel removed per current scope
 
   return (
