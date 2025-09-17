@@ -11,29 +11,34 @@ export function ProofBadge({ status, iconOnly = false }: { status: ProofStatus; 
   const map = {
     verified: {
       icon: <CheckCircle2 size={16} className="text-[var(--success)]" />,
-      label: "ZK verified",
+      label: "Verified",
+      cls: "success",
     },
     pending: {
       icon: <Clock3 size={16} className="text-[var(--warning)]" />,
-      label: "ZK proof pending",
+      label: "Verifying…",
+      cls: "pending",
     },
     invalid: {
       icon: <XCircle size={16} className="text-[var(--danger)]" />,
-      label: "ZK proof invalid",
+      label: "Invalid",
+      cls: "invalid",
     },
     unavailable: {
       icon: <MinusCircle size={16} className="text-[var(--muted)]" />,
-      label: "No ZK proof yet",
+      label: "No proof",
+      cls: "muted",
     },
     error: {
       icon: <MinusCircle size={16} className="text-[var(--error)]" />,
-      label: "Verification error",
+      label: "Error",
+      cls: "error",
     },
   } as const;
 
   const s = map[status];
   return (
-    <span className="badge text-xs group relative">
+    <span className={`badge text-xs group relative proof-${s.cls}`}>
       {s.icon}
       {!iconOnly && <span>{s.label}</span>}
       {iconOnly && (

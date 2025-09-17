@@ -1,7 +1,6 @@
 import { getBaseUrl } from "@/lib/base-url";
 import { formatBytes, formatWu } from "@/lib/formatters";
-import { VerifyTxButton } from "@/components/VerifyTx";
-import { TxProofBadge } from "@/components/TxProofBadge";
+import TxVerifyWidget from "@/components/TxVerifyWidget";
 
 async function getTx(id: string) {
   const base = await getBaseUrl();
@@ -22,8 +21,7 @@ export default async function TxPage({ params }: { params: Promise<{ id: string 
             <h1 className="text-xl font-semibold font-mono break-all">{tx.txid}</h1>
           </div>
           <div className="flex items-center gap-3">
-            <TxProofBadge txid={tx.txid} />
-            <VerifyTxButton txid={tx.txid} />
+            <TxVerifyWidget txid={tx.txid} />
           </div>
         </div>
       </div>

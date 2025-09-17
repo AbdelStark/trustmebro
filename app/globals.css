@@ -139,6 +139,13 @@ body {
 /* Verify feedback */
 @keyframes pulseS { 0% { transform: scale(0.95); opacity: 0.2;} 50% { transform: scale(1.02); opacity: 1;} 100% { transform: scale(1); opacity: 1;} }
 .pulse-success { animation: pulseS 300ms ease; }
+@keyframes shimmer { 0% { background-position: -200% 0;} 100% { background-position: 200% 0;} }
+.proof-pending { position: relative; overflow: hidden; }
+.proof-pending { background-image: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.12), rgba(255,255,255,0.04)); background-size: 200% 100%; animation: shimmer 1.2s linear infinite; }
+.proof-success { box-shadow: 0 0 0 1px rgba(57,255,20,0.25) inset, 0 0 24px rgba(57,255,20,0.15); }
+.proof-invalid { box-shadow: 0 0 0 1px rgba(255,59,59,0.2) inset, 0 0 24px rgba(255,59,59,0.12); }
+.proof-error { box-shadow: 0 0 0 1px rgba(255,94,94,0.2) inset, 0 0 24px rgba(255,94,94,0.12); }
+.proof-muted { opacity: 0.9; }
 
 /* Reveal/fade for collapses */
 .reveal { transition: opacity 180ms ease, transform 180ms ease; opacity: 0; transform: translateY(-4px); }
