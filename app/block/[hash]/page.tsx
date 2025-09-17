@@ -3,8 +3,7 @@ import { ProofBadge, type ProofStatus } from "@/components/ProofBadge";
 import { getBaseUrl } from "@/lib/base-url";
 import { TxList } from "@/components/TxList";
 import { VerifyBlockButton } from "@/components/VerifyBlock";
-import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import BlockNav from "@/components/BlockNav";
 
 async function getHeader(hash: string) {
   const base = await getBaseUrl();
@@ -47,43 +46,7 @@ export default async function BlockDetail({ params }: { params: Promise<{ hash: 
           <h1 className="text-2xl font-semibold">#{header.height}</h1>
         </div>
         <div className="flex items-center gap-3 flex-1 justify-center">
-          {/* Prev / Next navigation */}
-          <div className="flex items-center gap-2">
-            {prevId ? (
-              <Link
-                href={`/block/${prevId}`}
-                className="btn"
-                title={`Previous block (#${header.height - 1})`}
-              >
-                <ChevronLeft size={16} />
-                <span className="hidden sm:inline">Previous</span>
-                <span className="sm:hidden">Prev</span>
-              </Link>
-            ) : (
-              <button className="btn" disabled title="No previous block">
-                <ChevronLeft size={16} />
-                <span className="hidden sm:inline">Previous</span>
-                <span className="sm:hidden">Prev</span>
-              </button>
-            )}
-            {nextId ? (
-              <Link
-                href={`/block/${nextId}`}
-                className="btn"
-                title={`Next block (#${header.height + 1})`}
-              >
-                <span className="hidden sm:inline">Next</span>
-                <span className="sm:hidden">Next</span>
-                <ChevronRight size={16} />
-              </Link>
-            ) : (
-              <button className="btn" disabled title="No next block yet">
-                <span className="hidden sm:inline">Next</span>
-                <span className="sm:hidden">Next</span>
-                <ChevronRight size={16} />
-              </button>
-            )}
-          </div>
+          <BlockNav prevId={prevId} nextId={nextId} height={header.height} />
         </div>
         <div className="flex items-center gap-3">
           <ProofBadge status={proof.status} />
@@ -91,6 +54,8 @@ export default async function BlockDetail({ params }: { params: Promise<{ hash: 
         </div>
       </div>
       <BlockHeaderTable header={header} />
+      {/* Sticky helper nav shown while scrolling */}
+      <BlockNav prevId={prevId} nextId={nextId} height={header.height} variant="sticky" />
       <TxList hash={p.hash} total={header.tx_count} />
     </div>
   );
