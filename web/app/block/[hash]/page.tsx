@@ -1,6 +1,7 @@
 import { BlockHeaderTable } from "@/components/BlockHeaderTable";
 import { ProofBadge, type ProofStatus } from "@/components/ProofBadge";
 import { getBaseUrl } from "@/lib/base-url";
+import { TxList } from "@/components/TxList";
 
 async function getHeader(hash: string) {
   const base = await getBaseUrl();
@@ -31,7 +32,7 @@ export default async function BlockDetail({ params }: { params: Promise<{ hash: 
         <ProofBadge status={proof.status} />
       </div>
       <BlockHeaderTable header={header} />
-      {/* Local header verification panel removed */}
+      <TxList hash={p.hash} total={header.tx_count} />
     </div>
   );
 }
