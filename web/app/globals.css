@@ -144,3 +144,11 @@ body {
 
 /* Sticky subheader inside panels */
 .sticky-sub { position: sticky; top: 0; z-index: 5; background: linear-gradient(180deg, rgba(17,18,20,0.96), rgba(17,18,20,0.88)); backdrop-filter: blur(2px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+/* Late overrides / additions */
+.badge { font-weight: 500; }
+.meter { height: 10px; }
+.row { display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.1); background: var(--surface); border-radius: 8px; padding: 0.5rem 0.75rem; transition: border-color 120ms ease, transform 120ms ease, box-shadow 120ms ease; }
+.row:hover { border-color: var(--accent-600); box-shadow: 0 6px 24px rgba(0,0,0,0.25); }
+.row:focus-within { outline: 2px solid var(--ring); outline-offset: 2px; }
+.label { font-size: 13px; letter-spacing: 0.04em; color: var(--muted-2); }
