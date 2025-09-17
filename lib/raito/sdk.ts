@@ -19,6 +19,9 @@ type VerifierConfig = {
 };
 
 let sdkPromise: Promise<ClientSdk> | null = null;
+// Simple in-memory proof cache per session
+const proofCache = new Map<string, string>();
+const proofPending = new Map<string, Promise<string>>();
 
 export async function getRaitoSdk(): Promise<ClientSdk> {
   if (!sdkPromise) {
@@ -38,10 +41,21 @@ export async function getRaitoSdk(): Promise<ClientSdk> {
       };
 
       const fetchProof = async (txid: string) => {
-        const url = `https://api.raito.wtf/compressed_spv_proof/${txid}`;
-        const r = await fetch(url, { headers: { Accept: "text/plain" } });
-        if (!r.ok) throw new Error(`fetchProof failed: ${r.status}`);
-        return r.text();
+        const cached = proofCache.get(txid);
+        if (cached) return cached;
+        const inflight = proofPending.get(txid);
+        if (inflight) return inflight;
+        const p = (async () => {
+          const url = `https://api.raito.wtf/compressed_spv_proof/${txid}`;
+          const r = await fetch(url, { headers: { Accept: "text/plain" } });
+          if (!r.ok) throw new Error(`fetchProof failed: ${r.status}`);
+          const text = await r.text();
+          proofCache.set(txid, text);
+          proofPending.delete(txid);
+          return text;
+        })();
+        proofPending.set(txid, p);
+        return p;
       };
 
       const fetchRecentProvenHeight = async () => {

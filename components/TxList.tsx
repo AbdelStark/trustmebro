@@ -6,7 +6,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { CopyToClipboard } from "./CopyToClipboard";
-import { TxProofBadge } from "./TxProofBadge";
 
 type TxMeta = { id: string; size: number; weight: number; fee?: number };
 
@@ -79,7 +78,6 @@ export function TxList({ hash, total }: { hash: string; total: number }) {
               return (
                 <div key={t.id} className="flex items-center justify-between rounded-md border border-white/10 bg-[var(--surface)] px-3 py-2">
                   <div className="flex items-center gap-2 min-w-0">
-                    <TxProofBadge txid={t.id} iconOnly={true} />
                     <div className="font-mono text-sm truncate pr-2">
                       <Link className="hover:underline" href={`/tx/${t.id}`}>{t.id}</Link>
                     </div>
