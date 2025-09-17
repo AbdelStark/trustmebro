@@ -6,9 +6,4 @@ export default defineConfig({
     include: ['lib/**/*.test.ts'],
     setupFiles: ['./test/setup.ts'],
   },
-  css: {
-    // Avoid loading project PostCSS/Tailwind in unit tests
-    postcss: null,
-  },
 })
-

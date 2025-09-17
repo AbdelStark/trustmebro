@@ -1,16 +1,19 @@
 import { BlockGrid } from "@/components/BlockGrid";
+import { getBaseUrl } from "@/lib/base-url";
 
 async function getBlocks(startHeight?: string) {
   const sp = startHeight ? `?start_height=${startHeight}` : "";
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/mempool/blocks${sp}`, {
+  const base = await getBaseUrl();
+  const res = await fetch(`${base}/api/mempool/blocks${sp}`, {
     cache: "no-store",
   });
   if (!res.ok) throw new Error("Failed to load blocks");
   return res.json();
 }
 
-export default async function Home({ searchParams }: { searchParams: { start_height?: string } }) {
-  const blocks = await getBlocks(searchParams?.start_height);
+export default async function Home({ searchParams }: { searchParams: Promise<{ start_height?: string }> }) {
+  const sp = await searchParams;
+  const blocks = await getBlocks(sp?.start_height);
   const last = blocks[blocks.length - 1]?.height;
   return (
     <div className="space-y-4">

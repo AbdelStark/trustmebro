@@ -1,5 +1,10 @@
 # TrustMeBro - A ZK enabled Bitcoin explorer
 
+Update (current status):
+- Fixed server fetches by introducing an absolute base URL helper for RSC/Route Handlers.
+- Removed the Local Header Verification panel from Block Detail and the /verify page (de‑scoped for now).
+- Keeping mocked ZK Proof badge; proxy API remains the single source for data.
+
 Below is a **step‑by‑step, end‑to‑end implementation plan** for a **modern, mini Bitcoin block explorer** that fetches **live data from the Mempool.space REST API**, with a **polished, Bitcoin‑maxi / cypherpunk** UI. The plan favors a **LLM‑friendly, maintainable** codebase and focuses on a **first iteration (V1)** that:
 
 * Lists the **latest X blocks** from tip
@@ -23,12 +28,11 @@ Where relevant, I cite the official API behavior and response shapes or show liv
 
 2. **Block Detail**
 
-   * Shows full block header info and the same **ZK badge**, plus a **“Verify header”** panel that recomputes the **double‑SHA256 of the serialized header** and checks it matches the reported hash; displays **target vs. hash** derived from `bits` (client‑side). (This is independent from the mocked ZK status.) See header format & bits→target rationale. ([developer.bitcoin.org][2])
+   * Shows full block header info and the same **ZK badge**.
 
-3. **Verify** (direct page)
+3. [Deferred] Verify page (Local header verification)
 
-   * Form: enter **height** or **hash** → fetch header → run **local proof‑of‑work/header hash check** → show result.
-   * ZK badge remains **mocked**: Verified / Pending / Invalid.
+   * Local PoW/header verification has been removed from the current scope. This can return later as a dedicated page.
 
 **Non‑functional**
 
@@ -306,9 +310,9 @@ export async function GET(req: NextRequest) {
 
 ---
 
-## 8) Local **header verification** (client‑side cryptography)
+## 8) Local header verification [Deferred]
 
-On Block Detail / Verify page, we **recompute the header hash** and compare it with the block `id` and the **target** implied by `bits`.
+This section is retained for future reference, but the feature is not active in the current build. If/when re‑enabled, we will recompute the header hash and compare it with the block `id` and the target from `bits`.
 
 * Header is **80 bytes**: version (4), prev block (32), merkle root (32), time (4), `bits` (4), `nonce` (4). See official reference. ([developer.bitcoin.org][2])
 * **PoW rule**: `doubleSHA256(header) as uint256 < target(bits)`. (Not “leading zeroes” per se.) ([Bitcoin Stack Exchange][8])
@@ -528,4 +532,3 @@ On Block Detail / Verify page, we **recompute the header hash** and compare it w
 * **Rate limits**: Cache proxy responses and progressively enhance with client caches.
 * **CORS**: Proxying via Next avoids browser CORS to public hosts.
 * **LLM prompts**: Store a `/docs/CONTRIBUTING.md` with coding conventions to guide future LLM codegen.
-

@@ -14,14 +14,14 @@ Below is a **ready‑to‑paste “Operating Manual”** for your code‑capable
 
 > **Role:** You are an autonomous software engineer tasked with delivering a **mini Bitcoin block explorer** built on a modern web stack, using the **Mempool.space REST API**. You must be **consistent, methodical, and careful**. You must **commit and push progressive milestones** with small, well‑scoped changes. All verification steps must be executed, logged, and processes **started in the background and stopped properly** after checks are complete.
 >
-> **Primary objectives (V1 scope):**
+> **Primary objectives (current scope):**
 >
 > 1. Implement a Next.js + TypeScript app (App Router) with Tailwind and shadcn/ui that:
 >
 >    * Lists the latest X blocks from tip using Mempool.space REST API.
 >    * Shows a block detail page with header info.
 >    * Adds a **mock ZK‑proof badge** per block (TLS‑style “green” indicator).
->    * Provides a “Verify” page: recompute block header double‑SHA256 and bits→target check locally.
+>    * Note: Local header verification (double‑SHA256/bits→target) has been de‑scoped for now.
 > 2. Produce an **excellent cypherpunk/Bitcoin‑maxi dark UI** (dominant black, Bitcoin orange).
 > 3. Ensure correctness with **types, Zod validation, linting, tests**.
 > 4. Maintain **progressive commits** and **push** after each thin milestone; keep CI green.
@@ -72,9 +72,9 @@ Below is a **ready‑to‑paste “Operating Manual”** for your code‑capable
 >
 > * If any step fails 2 consecutive attempts, **stop**, write a brief incident report in `LOGBOOK.md` with reproduction steps and suspected root cause, then propose a constrained fix as the next thin slice.
 >
-> **Definition of Done (V1):**
+> **Definition of Done (current cut):**
 >
-> * Home lists latest blocks (paged), block detail works, Verify page recomputes header hash & target, mock ZK badge renders, UI adheres to theme tokens, tests/lint/types pass, and background processes never remain running after checks.
+> * Home lists latest blocks (paged), block detail works, mock ZK badge renders, UI adheres to theme tokens, tests/lint/types pass, and background processes never remain running after checks.
 
 ---
 

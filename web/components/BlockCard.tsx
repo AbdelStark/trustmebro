@@ -7,6 +7,7 @@ import { truncateHex, formatBytes, formatWu } from "@/lib/formatters";
 import { ProofBadge, type ProofStatus } from "./ProofBadge";
 import { CopyToClipboard } from "./CopyToClipboard";
 import { TimeAgo } from "./TimeAgo";
+import { getBaseUrl } from "@/lib/base-url";
 
 type BlockHeader = {
   id: string;
@@ -20,7 +21,8 @@ type BlockHeader = {
 
 export async function BlockCard({ block }: { block: BlockHeader }) {
   // Fetch mocked proof status from our API (server component fetch)
-  const proof = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/proofs/block?hash=${block.id}`, { cache: "no-store" }).then(
+  const base = await getBaseUrl();
+  const proof = await fetch(`${base}/api/proofs/block?hash=${block.id}`, { cache: "no-store" }).then(
     (r) => r.json() as Promise<{ status: ProofStatus }>
   );
 
@@ -55,4 +57,3 @@ export async function BlockCard({ block }: { block: BlockHeader }) {
     </div>
   );
 }
-
