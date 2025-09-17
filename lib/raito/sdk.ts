@@ -1,23 +1,58 @@
 "use client";
 /**
  * What this file does
- * Provides a lazily-initialized Raito SPV SDK instance for client-side usage.
+ * Provides a lazily-initialized client-only wrapper around the Raito SPV WASM (web build).
+ * Avoids importing the Node build (which pulls `fs`) by using the explicit web export.
  */
-import type { RaitoSpvSdk } from "@starkware-bitcoin/spv-verify";
 
-let sdkPromise: Promise<RaitoSpvSdk> | null = null;
+type ClientSdk = {
+  fetchProof(txid: string): Promise<string>;
+  verifyProof(proof: string, config?: Partial<VerifierConfig>): Promise<boolean>;
+};
 
-export async function getRaitoSdk() {
+type VerifierConfig = {
+  min_work: string;
+  bootloader_hash: string;
+  task_program_hash: string;
+  task_output_size: number;
+};
+
+let sdkPromise: Promise<ClientSdk> | null = null;
+
+export async function getRaitoSdk(): Promise<ClientSdk> {
   if (!sdkPromise) {
     sdkPromise = (async () => {
-      const { createRaitoSpvSdk } = await import("@starkware-bitcoin/spv-verify");
-      const sdk = createRaitoSpvSdk();
-      console.log("[RaitoSDK/client] init: starting…");
-      await sdk.init();
-      console.log("[RaitoSDK/client] init: ready ✅");
-      return sdk as RaitoSpvSdk;
+      console.log("[RaitoSDK/client] init (web wasm): starting…");
+      const wasm = (await import("@starkware-bitcoin/spv-verify/wasm/web")) as any;
+      const start = wasm.default ?? wasm.__wbg_init;
+      if (typeof start === "function") await start();
+      if (typeof wasm.init === "function") await wasm.init();
+      console.log("[RaitoSDK/client] init (web wasm): ready ✅");
+
+      const defaults: VerifierConfig = {
+        min_work: "1813388729421943762059264",
+        bootloader_hash: "0x0001837d8b77b6368e0129ce3f65b5d63863cfab93c47865ee5cbe62922ab8f3",
+        task_program_hash: "0x00f0876bb47895e8c4a6e7043829d7886e3b135e3ef30544fb688ef4e25663ca",
+        task_output_size: 8,
+      };
+
+      const fetchProof = async (txid: string) => {
+        const url = `https://api.raito.wtf/compressed_spv_proof/${txid}`;
+        const r = await fetch(url, { headers: { Accept: "text/plain" } });
+        if (!r.ok) throw new Error(`fetchProof failed: ${r.status}`);
+        return r.text();
+      };
+
+      const verifyProof = async (proof: string, config?: Partial<VerifierConfig>) => {
+        const cfg = JSON.stringify({ ...defaults, ...(config || {}) });
+        const f = wasm.verify_proof_with_config ?? wasm.verify_proof;
+        if (typeof f !== "function") throw new Error("verify function not found");
+        return !!(await f(proof, cfg));
+      };
+
+      const sdk: ClientSdk = { fetchProof, verifyProof };
+      return sdk;
     })();
   }
   return sdkPromise;
 }
-
