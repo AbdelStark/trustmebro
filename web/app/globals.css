@@ -122,3 +122,25 @@ body {
   width: var(--p);
   background: linear-gradient(90deg, #8a8f99, #c0c4cc, var(--accent-600));
 }
+
+/* Status dot */
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.dot.success { background: var(--success); box-shadow: 0 0 8px rgba(57,255,20,0.4); }
+.dot.pending { background: var(--warning); }
+.dot.invalid { background: var(--danger); }
+.dot.muted { background: rgba(255,255,255,0.3); }
+
+/* Simple spinner */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); border-top-color: var(--accent-600); animation: spin 0.8s linear infinite; }
+
+/* Verify feedback */
+@keyframes pulseS { 0% { transform: scale(0.95); opacity: 0.2;} 50% { transform: scale(1.02); opacity: 1;} 100% { transform: scale(1); opacity: 1;} }
+.pulse-success { animation: pulseS 300ms ease; }
+
+/* Reveal/fade for collapses */
+.reveal { transition: opacity 180ms ease, transform 180ms ease; opacity: 0; transform: translateY(-4px); }
+.reveal.show { opacity: 1; transform: translateY(0); }
+
+/* Sticky subheader inside panels */
+.sticky-sub { position: sticky; top: 0; z-index: 5; background: linear-gradient(180deg, rgba(17,18,20,0.96), rgba(17,18,20,0.88)); backdrop-filter: blur(2px); border-bottom: 1px solid rgba(255,255,255,0.06); }

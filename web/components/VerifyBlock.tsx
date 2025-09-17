@@ -35,11 +35,10 @@ export function VerifyBlockButton({ header }: { header: any }) {
 
   return (
     <div className="flex items-center gap-3">
-      <button className="btn text-sm" onClick={run} disabled={busy}>{busy ? "Verifying…" : "Verify locally"}</button>
+      <button className="btn text-sm" onClick={run} disabled={busy}>{busy ? (<span className="flex items-center gap-2"><span className="spinner" /> Verifying…</span>) : "Verify locally"}</button>
       {result && (
-        <span className={`text-sm ${result.ok ? "text-[var(--success)]" : "text-[var(--danger)]"}`}>{result.details}</span>
+        <span className={`text-sm ${result.ok ? "text-[var(--success)]" : "text-[var(--danger)]"} ${result.ok ? 'pulse-success' : ''}`}>{result.details}</span>
       )}
     </div>
   );
 }
-
