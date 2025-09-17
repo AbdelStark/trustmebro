@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
       { source: "/(.*)", headers: securityHeaders },
     ];
   },
+  webpack: (config) => {
+    config.experiments = { ...config.experiments, asyncWebAssembly: true, layers: true, topLevelAwait: true } as any;
+    return config;
+  },
 };
 
 export default nextConfig;
