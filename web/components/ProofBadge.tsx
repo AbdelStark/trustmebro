@@ -11,19 +11,19 @@ export function ProofBadge({ status }: { status: ProofStatus }) {
   const map = {
     verified: {
       icon: <CheckCircle2 size={16} className="text-[var(--success)]" />,
-      label: "ZK verified (mock)",
+      label: "ZK verified",
     },
     pending: {
       icon: <Clock3 size={16} className="text-[var(--warning)]" />,
-      label: "ZK proof pending (mock)",
+      label: "ZK proof pending",
     },
     invalid: {
       icon: <XCircle size={16} className="text-[var(--danger)]" />,
-      label: "ZK proof invalid (mock)",
+      label: "ZK proof invalid",
     },
     unavailable: {
       icon: <MinusCircle size={16} className="text-[var(--muted)]" />,
-      label: "No ZK proof yet (mock)",
+      label: "No ZK proof yet",
     },
   } as const;
 

@@ -2,6 +2,7 @@ import { BlockHeaderTable } from "@/components/BlockHeaderTable";
 import { ProofBadge, type ProofStatus } from "@/components/ProofBadge";
 import { getBaseUrl } from "@/lib/base-url";
 import { TxList } from "@/components/TxList";
+import { VerifyBlockButton } from "@/components/VerifyBlock";
 
 async function getHeader(hash: string) {
   const base = await getBaseUrl();
@@ -24,12 +25,15 @@ export default async function BlockDetail({ params }: { params: Promise<{ hash: 
 
   return (
     <div className="space-y-6">
-      <div className="panel p-4 flex items-center justify-between">
-        <div className="space-y-1">
+      <div className="panel p-4 flex items-center justify-between gap-4 flex-wrap">
+        <div className="space-y-1 min-w-40">
           <div className="text-[13px] tracking-wide text-[var(--muted-2)]">Block</div>
           <h1 className="text-2xl font-semibold">#{header.height}</h1>
         </div>
-        <ProofBadge status={proof.status} />
+        <div className="flex items-center gap-3">
+          <ProofBadge status={proof.status} />
+          <VerifyBlockButton header={header} />
+        </div>
       </div>
       <BlockHeaderTable header={header} />
       <TxList hash={p.hash} total={header.tx_count} />
