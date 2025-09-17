@@ -24,21 +24,29 @@ export function TxList({ hash, total }: { hash: string; total: number }) {
     setError(null);
     try {
       const from = items.length;
+      console.log(`[TxList] loading txs for block ${hash} from=${from}`);
       const r = await fetch(`/api/mempool/block-txs?hash=${hash}${from ? `&from=${from}` : ""}`);
       const j = (await r.json()) as TxMeta[];
       if (!Array.isArray(j)) throw new Error("Bad response");
       setItems((prev) => [...prev, ...j]);
+      console.log(`[TxList] received ${j.length} txs (loaded=${from + j.length}/${total})`);
       // Lazy fetch proof status for these txs
       try {
+        console.groupCollapsed(`[TxList] fetching proof statuses for ${j.length} txs…`);
         await Promise.all(
           j.map(async (t) => {
+            const short = t.id.slice(0, 8);
+            console.log(`  → [${short}] status: request`);
             const rs = await fetch(`/api/proofs/tx?txid=${t.id}`);
             const js = await rs.json();
+            console.log(`  ← [${short}] status: ${js?.status ?? 'unknown'}`);
             setStatus((prev) => ({ ...prev, [t.id]: js.status as ProofStatus }));
           })
         );
+        console.groupEnd();
       } catch {}
     } catch (e: any) {
+      console.error(`[TxList] error loading txs:`, e);
       setError(e?.message || "Failed to load transactions");
     } finally {
       setLoading(false);
@@ -46,7 +54,7 @@ export function TxList({ hash, total }: { hash: string; total: number }) {
   }
 
   useEffect(() => {
-    if (open && items.length === 0) void loadMore();
+    if (open && items.length === 0) { console.log(`[TxList] expanded for block ${hash}`); void loadMore(); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
