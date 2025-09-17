@@ -34,6 +34,7 @@ export default function RootLayout({
               <Link href="/" className="font-bold tracking-tight text-[var(--accent-600)]">
                 ₿ TrustMeBro
               </Link>
+              <span className="label hidden sm:inline">ZK ready Bitcoin Explorer</span>
               <div className="flex-1" />
               <SearchBar />
             </div>
