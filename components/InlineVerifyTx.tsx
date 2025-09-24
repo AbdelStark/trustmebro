@@ -1,10 +1,7 @@
 "use client";
 
 import React from "react";
-import { getRaitoSdk } from "@/lib/raito/sdk";
-import { VerifierConfig } from "@starkware-bitcoin/spv-verify";
-
-const config: Partial<VerifierConfig> = { min_work: "0" };
+import { getClientRaitoSdk } from "@/lib/raito/client";
 
 export default function InlineVerifyTx({ txid }: { txid: string }) {
   const [busy, setBusy] = React.useState(false);
@@ -16,12 +13,11 @@ export default function InlineVerifyTx({ txid }: { txid: string }) {
     if (busy) return;
     setBusy(true); setOk(null); setMs(null); setVisible(false);
     try {
-      const sdk = await getRaitoSdk();
+      const sdk = await getClientRaitoSdk();
       const t0 = performance.now();
-      const proof = await sdk.fetchProof(txid);
-      const valid = await sdk.verifyProof(proof, config);
+      const tx = await sdk.verifyTransaction(txid);
       const dt = Math.round(performance.now() - t0);
-      setOk(valid); setMs(dt); setVisible(true);
+      setOk(!!tx); setMs(dt); setVisible(true);
       // Auto hide result after a short delay
       setTimeout(() => setVisible(false), 2500);
     } catch {
