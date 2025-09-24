@@ -4,10 +4,11 @@ import { getBaseUrl } from "@/lib/base-url";
 async function getBlocks(startHeight?: string) {
   const sp = startHeight ? `?start_height=${startHeight}` : "";
   const base = await getBaseUrl();
-  const res = await fetch(`${base}/api/mempool/blocks${sp}`, {
+  const url = `${base}/api/mempool/blocks${sp}`;  
+  const res = await fetch(url, {
     cache: "no-store",
   });
-  if (!res.ok) throw new Error("Failed to load blocks");
+  if (!res.ok) throw new Error(`Failed to load blocks from ${url}`);
   return res.json();
 }
 
