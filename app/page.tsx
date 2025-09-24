@@ -8,7 +8,14 @@ async function getBlocks(startHeight?: string) {
   const res = await fetch(url, {
     cache: "no-store",
   });
-  if (!res.ok) throw new Error(`Failed to load blocks from ${url}`);
+  if (!res.ok) {
+    const text = await res.text().catch(() => "<failed to read body>");
+    throw new Error(
+      `Failed to load blocks from ${url}\n` +
+      `Status: ${res.status} ${res.statusText}\n` +
+      `Response body: ${text}`
+    );
+  }
   return res.json();
 }
 
