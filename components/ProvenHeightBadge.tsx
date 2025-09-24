@@ -3,7 +3,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { getRaitoSdk } from "@/lib/raito/sdk";
+import { getClientRaitoSdk } from "@/lib/raito/client";
 
 function formatNumber(n: number) {
   return new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(n);
@@ -19,7 +19,7 @@ export default function ProvenHeightBadge() {
       // Try client-side first via SDK (preferred); fallback to server route on CORS.
       try {
         console.log("[ProvenHeight] client SDK: start fetchRecentProvenHeight()");
-        const sdk = await getRaitoSdk();
+        const sdk = await getClientRaitoSdk();
         const n = await sdk.fetchRecentProvenHeight();
         console.log("[ProvenHeight] client SDK: success height=", n);
         return n;
@@ -48,7 +48,7 @@ export default function ProvenHeightBadge() {
   }
 
   const onGoLatest = async () => {
-    if (!height) return;
+    if (height == null) return;
     try {
       setNavLoading(true);
       const r = await fetch(`/api/mempool/block-hash-by-height?height=${height}`, { cache: "no-store" });

@@ -25,12 +25,12 @@ export function VerifyTxButton({ txid }: { txid: string }) {
   async function run() {
     setBusy(true); setResult(null);
     try {
-      const { getRaitoSdk } = await import("@/lib/raito/sdk");
-      const sdk = await getRaitoSdk();
+      const { getClientRaitoSdk } = await import("@/lib/raito/client");
+      const sdk = await getClientRaitoSdk();
       const t0 = Date.now();
-      const proof = await sdk.fetchProof(txid);
-      const ok = await sdk.verifyProof(proof);
+      const tx = await sdk.verifyTransaction(txid);
       const dt = Date.now() - t0;
+      const ok = !!tx;
       setResult({ ok, details: ok ? `Verified in ${dt}ms` : `Invalid (${dt}ms)` });
     } catch (e: any) {
       setResult({ ok: false, details: e?.message || "Verification failed" });

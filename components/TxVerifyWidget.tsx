@@ -2,10 +2,7 @@
 
 import React from "react";
 import { ProofBadge, type ProofStatus } from "@/components/ProofBadge";
-import { getRaitoSdk } from "@/lib/raito/sdk";
-import { VerifierConfig } from "@starkware-bitcoin/spv-verify";
-
-const config: Partial<VerifierConfig> = { min_work: "0" };
+import { getClientRaitoSdk } from "@/lib/raito/client";
 
 export default function TxVerifyWidget({ txid }: { txid: string }) {
   const [status, setStatus] = React.useState<ProofStatus>("unavailable");
@@ -18,10 +15,10 @@ export default function TxVerifyWidget({ txid }: { txid: string }) {
     setTimeMs(null);
     setStatus("pending");
     try {
-      const sdk = await getRaitoSdk();
+      const sdk = await getClientRaitoSdk();
       const t0 = performance.now();
-      const proof = await sdk.fetchProof(txid);
-      const ok = await sdk.verifyProof(proof, config);
+      const tx = await sdk.verifyTransaction(txid);
+      const ok = !!tx;
       const dt = Math.round(performance.now() - t0);
       setStatus(ok ? "verified" : "invalid");
       setTimeMs(dt);

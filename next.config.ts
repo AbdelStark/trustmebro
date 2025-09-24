@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
   },
   webpack: (config) => {
     config.experiments = { ...config.experiments, asyncWebAssembly: true, layers: true, topLevelAwait: true } as any;
+    
     return config;
   },
 };
